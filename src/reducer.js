@@ -1,17 +1,48 @@
 const initState = {
-  count: 0
+  hour: 0,
+  minute: 0,
+  second: 0
 };
+function inc(state) {
+  var time = Object.assign({}, state);
+  time.second++;
+  if (time.second == 60) {
+    time.second = 0;
+    time.minute++;
+  }
+  if (time.minute == 60) {
+    time.minute = 0;
+    time.hour++;
+  }
+  if (time.hour == 24) {
+    time.hour = 0;
+  }
+  return time;
+}
+function dec(time) {
+  time.second--;
+  if (time.second < 0) {
+    time.second += 60;
+    time.minute--;
+  }
+  if (time.minute < 0) {
+    time.minute += 60;
+    time.hour--;
+  }
+  if (time.hour < 0) {
+    time.hour += 24;
+  }
+  return time;
+}
 function counterReducer(state = initState, action) {
   switch (action.type) {
     case "inc":
-      return { count: state.count + 1 };
+      return inc(state);
       break;
     case "dec":
-      return { count: state.count - 1 };
+      return dec(state);
       break;
   }
-  return {
-    count: 0
-  };
+  return initState;
 }
 export default counterReducer;
